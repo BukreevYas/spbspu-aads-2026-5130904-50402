@@ -1,2 +1,51 @@
+#include <iostream>
+#include <string>
+#include <list.hpp>
+
+namespace bukreev
+{
+  List< std::string > splitLine(std::string line);
+}
+
 int main()
-{}
+{
+  std::string line;
+  while (std::getline(std::cin, line))
+  {
+    bukreev::List< std::string > args = bukreev::splitLine(line);
+  }
+}
+
+bukreev::List< std::string > bukreev::splitLine(std::string line)
+{
+  List< std::string > res;
+
+  bool word = false;
+  size_t wordsti;
+  for (size_t i = 0; i < line.size(); i++)
+  {
+    if (line[i] == ' ')
+    {
+      if (word)
+      {
+        res.pushBack(line.substr(wordsti, i - wordsti));
+        word = false;
+      }
+    }
+    else
+    {
+      if (!word)
+      {
+        wordsti = i;
+        word = true;
+      }
+    }
+  }
+
+  if (word)
+  {
+    res.pushBack(line.substr(wordsti, line.size() - wordsti));
+  }
+
+  return res;
+}
