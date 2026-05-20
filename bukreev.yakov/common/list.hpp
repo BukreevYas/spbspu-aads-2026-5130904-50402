@@ -71,7 +71,7 @@ namespace bukreev
     void pushBack(const T& value);
     T popBack() noexcept;
     T popFront() noexcept;
-    void remove (const T& value);
+    bool remove (const T& value);
 
   private:
     Node< T > m_fake;
@@ -226,10 +226,11 @@ namespace bukreev
   }
 
   template< class T >
-  void List< T >::remove (const T& value)
+  bool List< T >::remove (const T& value)
   {
     Node< T >* current = m_fake.m_next;
     Node< T >* previous = &m_fake;
+    bool deleted = false;
 
     while (current != nullptr)
     {
@@ -248,11 +249,14 @@ namespace bukreev
         }
 
         delete current;
+        deleted = true;
       }
 
       previous = current;
       current = current->m_next;
     }
+
+    return deleted;
   }
 
   template< class T >
