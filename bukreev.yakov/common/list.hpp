@@ -71,6 +71,7 @@ namespace bukreev
     void pushBack(const T& value);
     T popBack() noexcept;
     T popFront() noexcept;
+    void remove (const T& value);
 
   private:
     Node< T > m_fake;
@@ -222,6 +223,36 @@ namespace bukreev
     }
 
     return retval;
+  }
+
+  template< class T >
+  void List< T >::remove (const T& value)
+  {
+    Node< T >* current = m_fake.m_next;
+    Node< T >* previous = &m_fake;
+
+    while (current != nullptr)
+    {
+      if (current->m_data == value)
+      {
+        previous->m_next = current->m_next;
+
+        if (current == m_tail)
+        {
+          m_tail = previous;
+        }
+
+        if (m_tail == &m_fake)
+        {
+          m_tail = nullptr;
+        }
+
+        delete current;
+      }
+
+      previous = current;
+      current = current->m_next;
+    }
   }
 
   template< class T >
