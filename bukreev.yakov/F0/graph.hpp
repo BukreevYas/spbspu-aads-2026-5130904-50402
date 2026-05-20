@@ -4,6 +4,7 @@
 #include <list.hpp>
 #include <unordered_map>
 #include <string>
+#include <iostream>
 
 namespace bukreev
 {
@@ -20,6 +21,19 @@ namespace bukreev
   };
 
   using GraphMap = std::unordered_map< std::string, Graph* >;
+
+  class Canvas
+  {
+  public:
+    Canvas(size_t width, size_t height);
+    void drawGraph(const Graph* graph);
+    void display(std::ostream& out);
+
+  private:
+    char* mSymbols;
+    size_t mWidth;
+    size_t mHeight;
+  };
 }
 
 #endif

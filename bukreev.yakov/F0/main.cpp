@@ -12,6 +12,7 @@ namespace bukreev
 int main()
 {
   bukreev::GraphMap map;
+  bukreev::Canvas canvas(5, 10);
 
   std::string line;
   while (std::getline(std::cin, line))
