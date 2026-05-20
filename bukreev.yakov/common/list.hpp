@@ -228,7 +228,7 @@ namespace bukreev
   template< class T >
   bool List< T >::remove (const T& value)
   {
-    Node< T >* current = m_fake.m_next;
+    Node< T >* current = m_fake.next;
     Node< T >* previous = &m_fake;
     bool deleted = false;
 
@@ -236,7 +236,7 @@ namespace bukreev
     {
       if (current->m_data == value)
       {
-        previous->m_next = current->m_next;
+        previous->next = current->next;
 
         if (current == m_tail)
         {
@@ -253,7 +253,7 @@ namespace bukreev
       }
 
       previous = current;
-      current = current->m_next;
+      current = current->next;
     }
 
     return deleted;
