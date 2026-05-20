@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <list.hpp>
+#include "graph.hpp"
+#include "commands.hpp"
 
 namespace bukreev
 {
@@ -9,10 +11,24 @@ namespace bukreev
 
 int main()
 {
+  bukreev::GraphMap map;
+
   std::string line;
   while (std::getline(std::cin, line))
   {
     bukreev::List< std::string > args = bukreev::splitLine(line);
+    std::string cmdname = *(args.cbegin());
+    if (cmdname == "load")
+    {
+      try
+      {
+        bukreev::commandLoad(args, map);
+      }
+      catch(...)
+      {
+        return 1;
+      }
+    }
   }
 }
 
