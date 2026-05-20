@@ -29,6 +29,11 @@ void bukreev::commandLoad(List< std::string > args, GraphMap& map)
     }
   }
 
+  if (args.size() == 3)
+  {
+    symbol = '*';
+  }
+
   if (!file.is_open())
   {
     std::cout << "<INVALID COMMAND>\n";
