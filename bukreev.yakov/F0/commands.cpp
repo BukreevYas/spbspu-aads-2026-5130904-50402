@@ -7,6 +7,7 @@ void bukreev::commandLoad(List< std::string > args, GraphMap& map)
   if (args.size() > 4 || args.size() < 3)
   {
     std::cout << "<INVALID COMMAND>\n";
+    return;
   }
 
   std::ifstream file;
@@ -44,7 +45,7 @@ void bukreev::commandLoad(List< std::string > args, GraphMap& map)
 
   while (file)
   {
-    int x, y;
+    size_t x, y;
     file >> x;
     if (!file)
     {
@@ -72,4 +73,31 @@ void bukreev::commandLoad(List< std::string > args, GraphMap& map)
   }
 
   map[name] = graph;
+}
+
+void bukreev::commandAdd(List< std::string > args, GraphMap& map, List< std::string >& names)
+{
+  if (args.size() != 2)
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
+  std::string name;
+  size_t i = 0;
+  for (LCIter< std::string > it = args.cbegin(); it != args.cend(); it++, i++)
+  {
+    if (i == 1)
+    {
+      name = *it;
+    }
+  }
+
+  if (!map.count(name))
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
+  names.pushBack(name);
 }

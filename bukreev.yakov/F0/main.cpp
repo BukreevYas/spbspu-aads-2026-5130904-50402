@@ -13,22 +13,28 @@ int main()
 {
   bukreev::GraphMap map;
   bukreev::Canvas canvas(5, 10);
+  bukreev::List< std::string > added;
 
   std::string line;
   while (std::getline(std::cin, line))
   {
     bukreev::List< std::string > args = bukreev::splitLine(line);
     std::string cmdname = *(args.cbegin());
-    if (cmdname == "load")
+
+    try
     {
-      try
+      if (cmdname == "load")
       {
         bukreev::commandLoad(args, map);
       }
-      catch(...)
+      else if (cmdname == "add")
       {
-        return 1;
+        bukreev::commandAdd(args, map, added);
       }
+    }
+    catch(...)
+    {
+      return 1;
     }
   }
 }

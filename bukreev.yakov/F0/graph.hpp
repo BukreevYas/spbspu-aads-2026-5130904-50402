@@ -10,8 +10,8 @@ namespace bukreev
 {
   struct point_t
   {
-    int x;
-    int y;
+    size_t x;
+    size_t y;
   };
 
   struct Graph
