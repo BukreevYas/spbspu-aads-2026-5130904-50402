@@ -9,7 +9,8 @@ namespace bukreev
 {
   void commandLoad(List< std::string > args, GraphMap& map);
   void commandAdd(List< std::string > args, GraphMap& map, List< std::string >& names);
-  void commandDisplay(
+  void commandRemove(List< std::string > args, List< std::string >& names);
+  void commandDisplay(List< std::string > args, GraphMap& map, List< std::string >& names);
     GraphMap& map,
     List< std::string >& names,
     Canvas& canvas,
