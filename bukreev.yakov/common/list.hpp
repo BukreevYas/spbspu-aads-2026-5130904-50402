@@ -234,7 +234,7 @@ namespace bukreev
 
     while (current != nullptr)
     {
-      if (current->m_data == value)
+      if (current->val == value)
       {
         previous->next = current->next;
 
