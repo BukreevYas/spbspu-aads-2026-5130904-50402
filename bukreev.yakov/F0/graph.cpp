@@ -6,28 +6,7 @@ bukreev::Canvas::Canvas(size_t width, size_t height)
   mWidth = width;
   mHeight = height;
 
-  mSymbols[0] = '+';
-
-  for (size_t i = 1; i < width; i++)
-  {
-    mSymbols[i] = '-';
-  }
-
-  for (size_t i = 1; i < height; i++)
-  {
-    mSymbols[i * width] = '|';
-  }
-
-  for (size_t i = 1; i < height; i++)
-  {
-    for (size_t j = 1; j < width; j++)
-    {
-      mSymbols[i * width + j] = ' ';
-    }
-  }
-
-  mSymbols[(height - 1) * width] = '^';
-  mSymbols[width - 1] = '>';
+  clear();
 }
 
 void bukreev::Canvas::drawGraph(const Graph* graph)
@@ -60,4 +39,30 @@ void bukreev::Canvas::display(std::ostream& out)
     out << mSymbols[j];
   }
   out << '\n';
+}
+
+void bukreev::Canvas::clear()
+{
+  mSymbols[0] = '+';
+
+  for (size_t i = 1; i < mWidth; i++)
+  {
+    mSymbols[i] = '-';
+  }
+
+  for (size_t i = 1; i < mHeight; i++)
+  {
+    mSymbols[i * mWidth] = '|';
+  }
+
+  for (size_t i = 1; i < mHeight; i++)
+  {
+    for (size_t j = 1; j < mWidth; j++)
+    {
+      mSymbols[i * mWidth + j] = ' ';
+    }
+  }
+
+  mSymbols[(mHeight - 1) * mWidth] = '^';
+  mSymbols[mWidth - 1] = '>';
 }

@@ -101,3 +101,19 @@ void bukreev::commandAdd(List< std::string > args, GraphMap& map, List< std::str
 
   names.pushBack(name);
 }
+
+void bukreev::commandDisplay(
+  GraphMap& map,
+  List< std::string >& names,
+  Canvas& canvas,
+  std::ostream& out
+)
+{
+  canvas.clear();
+  for (LCIter< std::string > it = names.cbegin(); it != names.cend(); it++)
+  {
+    canvas.drawGraph(map[*it]);
+  }
+
+  canvas.display(out);
+}
