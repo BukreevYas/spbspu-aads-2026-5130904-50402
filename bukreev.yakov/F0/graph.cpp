@@ -35,6 +35,11 @@ void bukreev::Canvas::drawGraph(const Graph* graph)
   for (LCIter< point_t > it = graph->points.cbegin(); it != graph->points.cend(); it++)
   {
     point_t pt = *it;
+    if (pt.x >= mWidth || pt.y >= mHeight)
+    {
+      continue;
+    }
+
     mSymbols[pt.y * mWidth + pt.x] = graph->symbol;
   }
 }
