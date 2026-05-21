@@ -27,6 +27,14 @@ int main()
       {
         bukreev::commandLoad(args, map);
       }
+      else if (cmdname == "width")
+      {
+        bukreev::commandWidth(args, canvas);
+      }
+      else if (cmdname == "height")
+      {
+        bukreev::commandHeight(args, canvas);
+      }
       else if (cmdname == "add")
       {
         bukreev::commandAdd(args, map, added);

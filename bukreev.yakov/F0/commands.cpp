@@ -132,6 +132,60 @@ void bukreev::commandClear(List< std::string >& names)
   names.clear();
 }
 
+void bukreev::commandWidth(List< std::string > args, Canvas& canvas)
+{
+  if (args.size() != 2)
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
+  size_t width;
+  size_t i = 0;
+  for (LCIter< std::string > it = args.cbegin(); it != args.cend(); it++, i++)
+  {
+    if (i == 1)
+    {
+      width = std::stoull(*it);
+    }
+  }
+
+  if (width < 2)
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
+  canvas.setSize(width, canvas.getHeight());
+}
+
+void bukreev::commandHeight(List< std::string > args, Canvas& canvas)
+{
+  if (args.size() != 2)
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
+  size_t height;
+  size_t i = 0;
+  for (LCIter< std::string > it = args.cbegin(); it != args.cend(); it++, i++)
+  {
+    if (i == 1)
+    {
+      height = std::stoull(*it);
+    }
+  }
+
+  if (height < 2)
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
+  canvas.setSize(canvas.getWidth(), height);
+}
+
 void bukreev::commandDisplay(
   GraphMap& map,
   List< std::string >& names,
