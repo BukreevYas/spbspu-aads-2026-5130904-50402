@@ -127,6 +127,11 @@ void bukreev::commandRemove(List< std::string > args, List< std::string >& names
   }
 }
 
+void bukreev::commandClear(List< std::string >& names)
+{
+  names.clear();
+}
+
 void bukreev::commandDisplay(
   GraphMap& map,
   List< std::string >& names,

@@ -35,6 +35,10 @@ int main()
       {
         bukreev::commandRemove(args, added);
       }
+      else if (cmdname == "clear")
+      {
+        bukreev::commandClear(added);
+      }
       else if (cmdname == "display")
       {
         bukreev::commandDisplay(map, added, canvas, std::cout);
