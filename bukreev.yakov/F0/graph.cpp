@@ -2,11 +2,32 @@
 
 bukreev::Canvas::Canvas(size_t width, size_t height)
 {
+  initialise(width, height);
+}
+
+void bukreev::Canvas::initialise(size_t width, size_t height)
+{
   mSymbols = new char[width * height];
   mWidth = width;
   mHeight = height;
 
   clear();
+}
+
+void bukreev::Canvas::setSize(size_t width, size_t height)
+{
+  delete[] mSymbols;
+  initialise(width, height);
+}
+
+size_t bukreev::Canvas::getWidth()
+{
+  return mWidth;
+}
+
+size_t bukreev::Canvas::getHeight()
+{
+  return mHeight;
 }
 
 void bukreev::Canvas::drawGraph(const Graph* graph)

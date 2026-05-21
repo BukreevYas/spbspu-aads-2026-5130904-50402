@@ -26,9 +26,15 @@ namespace bukreev
   {
   public:
     Canvas(size_t width, size_t height);
+    size_t getWidth();
+    size_t getHeight();
+    void setSize(size_t width, size_t height);
     void drawGraph(const Graph* graph);
     void display(std::ostream& out);
     void clear();
+
+  private:
+    void initialise(size_t width, size_t height);
 
   private:
     char* mSymbols;
