@@ -43,6 +43,10 @@ int main()
       {
         bukreev::commandRemove(args, added);
       }
+      else if (cmdname == "rename")
+      {
+        bukreev::commandRename(args, map, added);
+      }
       else if (cmdname == "clear")
       {
         bukreev::commandClear(added);

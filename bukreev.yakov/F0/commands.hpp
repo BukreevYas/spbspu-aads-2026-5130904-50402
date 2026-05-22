@@ -12,6 +12,7 @@ namespace bukreev
   void commandHeight(List< std::string > args, Canvas& canvas);
   void commandAdd(List< std::string > args, GraphMap& map, List< std::string >& names);
   void commandRemove(List< std::string > args, List< std::string >& names);
+  void commandRename(List< std::string > args, GraphMap& map, List< std::string >& names);
   void commandClear(List< std::string >& names);
   void commandDisplay(
     GraphMap& map,

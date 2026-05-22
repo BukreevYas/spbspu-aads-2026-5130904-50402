@@ -127,6 +127,41 @@ void bukreev::commandRemove(List< std::string > args, List< std::string >& names
   }
 }
 
+void bukreev::commandRename(List< std::string > args, GraphMap& map, List< std::string >& names)
+{
+  if (args.size() != 3)
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
+  std::string name1, name2;
+  size_t i = 0;
+  for (LCIter< std::string > it = args.cbegin(); it != args.cend(); it++, i++)
+  {
+    if (i == 1)
+    {
+      name1 = *it;
+    }
+    else if (i == 2)
+    {
+      name2 = *it;
+    }
+  }
+
+  if (!map.count(name1) || map.count(name2))
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
+  map[name2] = map[name1];
+  map.erase(name1);
+
+  names.remove(name1);
+  names.pushBack(name2);
+}
+
 void bukreev::commandClear(List< std::string >& names)
 {
   names.clear();
