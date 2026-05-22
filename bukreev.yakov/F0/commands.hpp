@@ -25,6 +25,7 @@ namespace bukreev
     List< std::string >& names,
     Canvas& canvas
   );
+  void commandList(GraphMap& map, List< std::string >& names);
 }
 
 #endif

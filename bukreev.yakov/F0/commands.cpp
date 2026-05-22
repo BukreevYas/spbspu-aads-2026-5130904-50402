@@ -228,3 +228,25 @@ void bukreev::commandSave(
   std::ofstream file(filename);
   commandDisplay(map, names, canvas, file);
 }
+
+void bukreev::commandList(GraphMap& map, List< std::string >& names)
+{
+  for (const std::pair< std::string, Graph* > p : map)
+  {
+    bool added = false;
+    for (LCIter< std::string > it = names.cbegin(); it != names.cend(); it++)
+    {
+      if (*it == p.first)
+      {
+        added = true;
+      }
+    }
+
+    Graph* gr = p.second;
+    std::cout << p.first << '\n';
+    std::cout << "  symbol: " << gr->symbol << '\n';
+    std::cout << "  added: " << (added ? "Yes" : "No") << '\n';
+
+    std::cout << '\n';
+  }
+}

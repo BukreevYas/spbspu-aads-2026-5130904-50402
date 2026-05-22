@@ -55,6 +55,10 @@ int main()
       {
         bukreev::commandSave(args, map, added, canvas);
       }
+      else if (cmdname == "list")
+      {
+        bukreev::commandList(map, added);
+      }
     }
     catch(...)
     {
