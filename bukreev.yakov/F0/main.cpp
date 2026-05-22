@@ -51,6 +51,10 @@ int main()
       {
         bukreev::commandDisplay(map, added, canvas, std::cout);
       }
+      else if (cmdname == "save")
+      {
+        bukreev::commandSave(args, map, added, canvas);
+      }
     }
     catch(...)
     {

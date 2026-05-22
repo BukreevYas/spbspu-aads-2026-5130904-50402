@@ -19,6 +19,12 @@ namespace bukreev
     Canvas& canvas,
     std::ostream& out
   );
+  void commandSave(
+    List< std::string > args,
+    GraphMap& map,
+    List< std::string >& names,
+    Canvas& canvas
+  );
 }
 
 #endif

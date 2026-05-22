@@ -201,3 +201,30 @@ void bukreev::commandDisplay(
 
   canvas.display(out);
 }
+
+void bukreev::commandSave(
+  List< std::string > args,
+  GraphMap& map,
+  List< std::string >& names,
+  Canvas& canvas
+)
+{
+  if (args.size() != 2)
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
+  std::string filename;
+  size_t i = 0;
+  for (LCIter< std::string > it = args.cbegin(); it != args.cend(); it++, i++)
+  {
+    if (i == 1)
+    {
+      filename = *it;
+    }
+  }
+
+  std::ofstream file(filename);
+  commandDisplay(map, names, canvas, file);
+}
