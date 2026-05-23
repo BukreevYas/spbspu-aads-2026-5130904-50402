@@ -3,6 +3,18 @@
 #include <fstream>
 #include <math.h>
 
+size_t mysub(size_t a, size_t b)
+{
+  if (a > b)
+  {
+    return a - b;
+  }
+  else
+  {
+    return b - a;
+  }
+}
+
 void bukreev::commandLoad(List< std::string > args, GraphMap& map)
 {
   static bool first = true;
@@ -17,20 +29,22 @@ void bukreev::commandLoad(List< std::string > args, GraphMap& map)
   std::string name;
   char symbol;
   size_t i = 0;
-  for (LCIter< std::string > it = args.cbegin(); it != args.cend(); it++, i++)
+  for (const std::string& arg : args)
   {
     if (i == 1)
     {
-      name = *it;
+      name = arg;
     }
     else if (i == 2)
     {
-      file.open(*it);
+      file.open(arg);
     }
     else if (i == 3)
     {
-      symbol = (*it)[0];
+      symbol = arg[0];
     }
+
+    i++;
   }
 
   if (args.size() == 3)
@@ -98,12 +112,14 @@ void bukreev::commandAdd(List< std::string > args, GraphMap& map, List< std::str
 
   std::string name;
   size_t i = 0;
-  for (LCIter< std::string > it = args.cbegin(); it != args.cend(); it++, i++)
+  for (const std::string& arg : args)
   {
     if (i == 1)
     {
-      name = *it;
+      name = arg;
     }
+
+    i++;
   }
 
   if (!map.count(name))
@@ -125,12 +141,14 @@ void bukreev::commandRemove(List< std::string > args, List< std::string >& names
 
   std::string name;
   size_t i = 0;
-  for (LCIter< std::string > it = args.cbegin(); it != args.cend(); it++, i++)
+  for (const std::string& arg : args)
   {
     if (i == 1)
     {
-      name = *it;
+      name = arg;
     }
+
+    i++;
   }
 
   if (!names.remove(name))
@@ -150,16 +168,18 @@ void bukreev::commandRename(List< std::string > args, GraphMap& map, List< std::
 
   std::string name1, name2;
   size_t i = 0;
-  for (LCIter< std::string > it = args.cbegin(); it != args.cend(); it++, i++)
+  for (const std::string& arg : args)
   {
     if (i == 1)
     {
-      name1 = *it;
+      name1 = arg;
     }
     else if (i == 2)
     {
-      name2 = *it;
+      name2 = arg;
     }
+
+    i++;
   }
 
   if (!map.count(name1) || map.count(name2))
@@ -190,12 +210,14 @@ void bukreev::commandWidth(List< std::string > args, Canvas& canvas)
 
   size_t width;
   size_t i = 0;
-  for (LCIter< std::string > it = args.cbegin(); it != args.cend(); it++, i++)
+  for (const std::string& arg : args)
   {
     if (i == 1)
     {
-      width = std::stoull(*it);
+      width = std::stoull(arg);
     }
+
+    i++;
   }
 
   if (width < 2)
@@ -217,12 +239,14 @@ void bukreev::commandHeight(List< std::string > args, Canvas& canvas)
 
   size_t height;
   size_t i = 0;
-  for (LCIter< std::string > it = args.cbegin(); it != args.cend(); it++, i++)
+  for (const std::string& arg : args)
   {
     if (i == 1)
     {
-      height = std::stoull(*it);
+      height = std::stoull(arg);
     }
+
+    i++;
   }
 
   if (height < 2)
@@ -242,9 +266,9 @@ void bukreev::commandDisplay(
 )
 {
   canvas.clear();
-  for (LCIter< std::string > it = names.cbegin(); it != names.cend(); it++)
+  for (const std::string& name : names)
   {
-    canvas.drawGraph(map[*it]);
+    canvas.drawGraph(map[name]);
   }
 
   canvas.display(out);
@@ -265,12 +289,14 @@ void bukreev::commandSave(
 
   std::string filename;
   size_t i = 0;
-  for (LCIter< std::string > it = args.cbegin(); it != args.cend(); it++, i++)
+  for (const std::string& arg : args)
   {
     if (i == 1)
     {
-      filename = *it;
+      filename = arg;
     }
+
+    i++;
   }
 
   std::ofstream file(filename);
@@ -281,14 +307,7 @@ void bukreev::commandList(GraphMap& map, List< std::string >& names)
 {
   for (const std::pair< std::string, Graph* > p : map)
   {
-    bool added = false;
-    for (LCIter< std::string > it = names.cbegin(); it != names.cend(); it++)
-    {
-      if (*it == p.first)
-      {
-        added = true;
-      }
-    }
+    bool added = names.count(p.first) != 0;
 
     Graph* gr = p.second;
     std::cout << p.first << '\n';
@@ -299,7 +318,7 @@ void bukreev::commandList(GraphMap& map, List< std::string >& names)
   }
 }
 
-void bukreev::commandApproximate(List< std::string > args, GraphMap& map)
+void bukreev::commandApproximate(List< std::string > args, GraphMap& map, List< std::string >& names)
 {
   if (args.size() != 3)
   {
@@ -310,44 +329,97 @@ void bukreev::commandApproximate(List< std::string > args, GraphMap& map)
   std::string name;
   char symbol;
   size_t i = 0;
-  for (LCIter< std::string > it = args.cbegin(); it != args.cend(); it++, i++)
+  for (const std::string& arg : args)
   {
     if (i == 1)
     {
-      name = *it;
+      name = arg;
     }
     else if (i == 2)
     {
-      symbol = (*it)[0];
+      symbol = arg[0];
     }
+
+    i++;
   }
 
   Graph* gr = map[name];
-  size_t pdev = 0;
-  size_t sqrtdev = 0;
-  for (LCIter< point_t > it = gr->points.cbegin(); it != gr->points.cend(); it++)
+  size_t deviations[6] = {};
+  for (const point_t pt : gr->points)
   {
-    point_t pt = *it;
     size_t v = pt.x * pt.x;
-    if (v > pt.y)
-    {
-      pdev += v - pt.y;
-    }
-    else
-    {
-      pdev += pt.y - v;
-    }
+    deviations[0] += mysub(v, pt.y);
 
     v = static_cast< size_t >(sqrt(pt.x));
-    if (v > pt.y)
+    deviations[1] += mysub(v, pt.y);
+
+    v = static_cast< size_t >(exp(pt.x));
+    deviations[2] += mysub(v, pt.y);
+
+    v = static_cast< size_t >(log(pt.x));
+    deviations[3] += mysub(v, pt.y);
+
+    v = static_cast< size_t >(log10(pt.x));
+    deviations[4] += mysub(v, pt.y);
+
+    v = static_cast< size_t >(log2(pt.x));
+    deviations[5] += mysub(v, pt.y);
+  }
+
+  size_t mindev = deviations[0];
+  size_t mini = 0;
+  for (size_t i = 1; i < 6; i++)
+  {
+    if (deviations[i] < mindev)
     {
-      sqrtdev += v - pt.y;
-    }
-    else
-    {
-      sqrtdev += pt.y - v;
+      mindev = deviations[i];
+      mini = i;
     }
   }
 
-  std::cout << (pdev < sqrtdev ? "parabola" : "sqrt") << symbol << "\n\n";
+  std::string stdnames[] = {"parabola", "sqrt", "exp", "log", "log10", "log2"};
+  std::cout << stdnames[mini] << "\n";
+
+  Graph* graph = new Graph;
+  for (const point_t pt : gr->points)
+  {
+    size_t v;
+    switch (mini)
+    {
+    case 0:
+      v = pt.x * pt.x;
+      break;
+
+    case 1:
+      v = static_cast< size_t >(sqrt(pt.x));
+      break;
+
+    case 2:
+      v = static_cast< size_t >(exp(pt.x));
+      break;
+
+    case 3:
+      v = static_cast< size_t >(log(pt.x));
+      break;
+
+    case 4:
+      v = static_cast< size_t >(log10(pt.x));
+      break;
+
+    case 5:
+      v = static_cast< size_t >(log2(pt.x));
+      break;
+    }
+
+    graph->points.pushBack({pt.x, v});
+  }
+
+  graph->symbol = symbol;
+
+  map[name + "_approximated"] = graph;
+
+  if (names.count(name))
+  {
+    names.pushBack(name + "_approximated");
+  }
 }

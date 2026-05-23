@@ -65,7 +65,7 @@ int main()
       }
       else if (cmdname == "approximate")
       {
-        bukreev::commandApproximate(args, map);
+        bukreev::commandApproximate(args, map, added);
       }
     }
     catch(...)

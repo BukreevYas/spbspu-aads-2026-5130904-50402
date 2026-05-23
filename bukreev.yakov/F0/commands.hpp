@@ -27,7 +27,7 @@ namespace bukreev
     Canvas& canvas
   );
   void commandList(GraphMap& map, List< std::string >& names);
-  void commandApproximate(List< std::string > args, GraphMap& map);
+  void commandApproximate(List< std::string > args, GraphMap& map, List< std::string >& names);
 }
 
 #endif

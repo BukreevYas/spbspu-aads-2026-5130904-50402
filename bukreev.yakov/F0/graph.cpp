@@ -32,9 +32,8 @@ size_t bukreev::Canvas::getHeight()
 
 void bukreev::Canvas::drawGraph(const Graph* graph)
 {
-  for (LCIter< point_t > it = graph->points.cbegin(); it != graph->points.cend(); it++)
+  for (const point_t pt : graph->points)
   {
-    point_t pt = *it;
     if (pt.x >= mWidth || pt.y >= mHeight)
     {
       continue;
