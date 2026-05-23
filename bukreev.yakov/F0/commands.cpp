@@ -1,6 +1,7 @@
 #include "commands.hpp"
 #include <iostream>
 #include <fstream>
+#include <math.h>
 
 void bukreev::commandLoad(List< std::string > args, GraphMap& map)
 {
@@ -296,4 +297,57 @@ void bukreev::commandList(GraphMap& map, List< std::string >& names)
 
     std::cout << '\n';
   }
+}
+
+void bukreev::commandApproximate(List< std::string > args, GraphMap& map)
+{
+  if (args.size() != 3)
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
+  std::string name;
+  char symbol;
+  size_t i = 0;
+  for (LCIter< std::string > it = args.cbegin(); it != args.cend(); it++, i++)
+  {
+    if (i == 1)
+    {
+      name = *it;
+    }
+    else if (i == 2)
+    {
+      symbol = (*it)[0];
+    }
+  }
+
+  Graph* gr = map[name];
+  size_t pdev = 0;
+  size_t sqrtdev = 0;
+  for (LCIter< point_t > it = gr->points.cbegin(); it != gr->points.cend(); it++)
+  {
+    point_t pt = *it;
+    size_t v = pt.x * pt.x;
+    if (v > pt.y)
+    {
+      pdev += v - pt.y;
+    }
+    else
+    {
+      pdev += pt.y - v;
+    }
+
+    v = static_cast< size_t >(sqrt(pt.x));
+    if (v > pt.y)
+    {
+      sqrtdev += v - pt.y;
+    }
+    else
+    {
+      sqrtdev += pt.y - v;
+    }
+  }
+
+  std::cout << (pdev < sqrtdev ? "parabola" : "sqrt") << symbol << "\n\n";
 }

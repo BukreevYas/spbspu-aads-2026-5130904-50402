@@ -63,6 +63,10 @@ int main()
       {
         bukreev::commandList(map, added);
       }
+      else if (cmdname == "approximate")
+      {
+        bukreev::commandApproximate(args, map);
+      }
     }
     catch(...)
     {
