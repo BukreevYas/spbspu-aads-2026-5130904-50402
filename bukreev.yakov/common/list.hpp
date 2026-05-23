@@ -64,6 +64,7 @@ namespace bukreev
     List< T >& operator=(const List< T >& other);
     void clear() noexcept;
     size_t size() const noexcept;
+    size_t count(const T& value);
     LIter< T > begin() const noexcept;
     LIter< T > end() const noexcept;
     LCIter< T > cbegin() const noexcept;
@@ -138,6 +139,21 @@ namespace bukreev
     for (LCIter< T > it = cbegin(); it != cend(); it++)
     {
       res++;
+    }
+
+    return res;
+  }
+
+  template< class T >
+  size_t List< T >::count(const T& value)
+  {
+    size_t res = 0;
+    for (LCIter< T > it = cbegin(); it != cend(); it++)
+    {
+      if (*it == value)
+      {
+        res++;
+      }
     }
 
     return res;
