@@ -23,7 +23,8 @@ namespace bukreev
     LIter() = default;
     LIter(Node< T >* node) noexcept;
     T& operator*() const;
-    LIter& operator++(int) noexcept;
+    LIter& operator++() noexcept;
+    LIter operator++(int) noexcept;
     bool operator==(const LIter< T >& other);
     bool operator!=(const LIter< T >& other);
 
@@ -43,7 +44,8 @@ namespace bukreev
     LCIter() = default;
     LCIter(Node< T >* node) noexcept;
     T& operator*() const;
-    LCIter& operator++(int) noexcept;
+    LCIter& operator++() noexcept;
+    LCIter operator++(int) noexcept;
     bool operator==(const LCIter< T >& other);
     bool operator!=(const LCIter< T >& other);
 
@@ -64,7 +66,7 @@ namespace bukreev
     List< T >& operator=(const List< T >& other);
     void clear() noexcept;
     size_t size() const noexcept;
-    size_t count(const T& value);
+    size_t count(const T& value) const noexcept;
     LIter< T > begin() const noexcept;
     LIter< T > end() const noexcept;
     LCIter< T > cbegin() const noexcept;
@@ -145,7 +147,7 @@ namespace bukreev
   }
 
   template< class T >
-  size_t List< T >::count(const T& value)
+  size_t List< T >::count(const T& value) const noexcept
   {
     size_t res = 0;
     for (LCIter< T > it = cbegin(); it != cend(); it++)
@@ -288,10 +290,18 @@ namespace bukreev
   }
 
   template< class T >
-  LIter< T >& LIter< T >::operator++(int) noexcept
+  LIter< T >& LIter< T >::operator++() noexcept
   {
     *this = next();
     return *this;
+  }
+
+  template< class T >
+  LIter< T > LIter< T >::operator++(int) noexcept
+  {
+    LIter< T >& temp = *this;
+    ++*this;
+    return temp;
   }
 
   template< class T >
@@ -325,10 +335,18 @@ namespace bukreev
   }
 
   template< class T >
-  LCIter< T >& LCIter< T >::operator++(int) noexcept
+  LCIter< T >& LCIter< T >::operator++() noexcept
   {
     *this = next();
     return *this;
+  }
+
+  template< class T >
+  LCIter< T > LCIter< T >::operator++(int) noexcept
+  {
+    LCIter< T >& temp = *this;
+    ++*this;
+    return temp;
   }
 
   template< class T >
