@@ -4,7 +4,7 @@
 
 namespace bukreev
 {
-  using Sequence = std::pair< std::string, List< int > >;
+  using Sequence = std::pair< std::string, List< size_t > >;
 
   bool input(std::istream& in, List< Sequence >& seqs);
   void output(std::ostream& out, const List< Sequence >& seqs, bool overflow);
@@ -37,15 +37,15 @@ bool bukreev::input(std::istream& in, List< Sequence >& seqs)
 
   while (in)
   {
-    List< int > list;
+    List< size_t > list;
 
-    int num;
+    size_t num;
     std::string strnum;
     while (in >> strnum)
     {
       try
       {
-        num = std::stoi(strnum);
+        num = std::stoull(strnum);
       }
       catch(const std::invalid_argument& e)
       {
@@ -75,6 +75,8 @@ bool bukreev::input(std::istream& in, List< Sequence >& seqs)
 
 void bukreev::output(std::ostream& out, const List< Sequence >& seqs, bool overflow)
 {
+  bool ofl = false;
+
   LCIter< Sequence > it = seqs.cbegin();
   if (it == seqs.cend())
   {
@@ -90,7 +92,7 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs, bool overf
   }
   out << '\n';
 
-  using ItPair = std::pair< LCIter< int >, LCIter< int > >;
+  using ItPair = std::pair< LCIter< size_t >, LCIter< size_t > >;
 
   size_t size = seqs.size();
   ItPair* numIts = new ItPair[size];
@@ -101,13 +103,13 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs, bool overf
     numIts[i] = {(*it).second.cbegin(), (*it).second.cend()};
   }
 
-  bukreev::List< int > sums;
+  bukreev::List< size_t > sums;
 
   bool display = true;
   while (display)
   {
     display = false;
-    int s = 0;
+    size_t s = 0;
     bool firstInLine = true;
     for (i = 0; i < size; i++)
     {
@@ -115,10 +117,10 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs, bool overf
       {
         display = true;
 
-        int n = *numIts[i].first;
-        if (n > std::numeric_limits< int >::max() - s)
+        size_t n = *numIts[i].first;
+        if (n > std::numeric_limits< size_t >::max() - s)
         {
-          throw std::overflow_error("Integer overflow");
+          ofl = true;
         }
         s += n;
 
@@ -145,6 +147,11 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs, bool overf
 
   delete[] numIts;
 
+  if (ofl)
+  {
+    throw std::overflow_error("Integer overflow");
+  }
+
   if (!overflow)
   {
     if (sums.size() == 0)
@@ -153,7 +160,7 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs, bool overf
       return;
     }
 
-    LCIter< int > sumit = sums.cbegin();
+    LCIter< size_t > sumit = sums.cbegin();
     if (sumit != sums.cend())
     {
       out << *sumit;
