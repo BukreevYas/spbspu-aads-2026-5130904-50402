@@ -22,10 +22,14 @@ namespace bukreev
   public:
     LIter() = default;
     LIter(Node< T >* node) noexcept;
-    LIter< T > next() const noexcept;
     T& operator*() const;
+    LIter& operator++() noexcept;
+    LIter operator++(int) noexcept;
     bool operator==(const LIter< T >& other);
     bool operator!=(const LIter< T >& other);
+
+  private:
+    LIter next() const noexcept;
 
   private:
     Node< T >* m_cur;
@@ -39,10 +43,14 @@ namespace bukreev
   public:
     LCIter() = default;
     LCIter(Node< T >* node) noexcept;
-    LCIter< T > next() const noexcept;
     T& operator*() const;
+    LCIter& operator++() noexcept;
+    LCIter operator++(int) noexcept;
     bool operator==(const LCIter< T >& other);
     bool operator!=(const LCIter< T >& other);
+
+  private:
+    LCIter next() const noexcept;
 
   private:
     Node< T >* m_cur;
@@ -58,11 +66,15 @@ namespace bukreev
     List< T >& operator=(const List< T >& other);
     void clear() noexcept;
     size_t size() const noexcept;
+    size_t count(const T& value) const noexcept;
     LIter< T > begin() const noexcept;
     LIter< T > end() const noexcept;
     LCIter< T > cbegin() const noexcept;
     LCIter< T > cend() const noexcept;
     void pushBack(const T& value);
+    T popBack() noexcept;
+    T popFront() noexcept;
+    bool remove (const T& value);
 
   private:
     Node< T > m_fake;
@@ -82,7 +94,7 @@ namespace bukreev
     m_fake.next = nullptr;
     m_tail = nullptr;
 
-    for (LIter< T > it = other.begin(); it != other.end(); it = it.next())
+    for (LIter< T > it = other.begin(); it != other.end(); it++)
     {
       pushBack(*it);
     }
@@ -99,7 +111,7 @@ namespace bukreev
   {
     clear();
 
-    for (LIter< T > it = other.begin(); it != other.end(); it = it.next())
+    for (LIter< T > it = other.begin(); it != other.end(); it++)
     {
       pushBack(*it);
     }
@@ -126,9 +138,24 @@ namespace bukreev
   size_t List< T >::size() const noexcept
   {
     size_t res = 0;
-    for (LCIter< T > it = cbegin(); it != cend(); it = it.next())
+    for (LCIter< T > it = cbegin(); it != cend(); it++)
     {
       res++;
+    }
+
+    return res;
+  }
+
+  template< class T >
+  size_t List< T >::count(const T& value) const noexcept
+  {
+    size_t res = 0;
+    for (LCIter< T > it = cbegin(); it != cend(); it++)
+    {
+      if (*it == value)
+      {
+        res++;
+      }
     }
 
     return res;
@@ -177,6 +204,80 @@ namespace bukreev
   }
 
   template< class T >
+  T List< T >::popBack() noexcept
+  {
+    Node< T >* lastNode;
+    Node< T >* prevNode = &m_fake;
+    for (Node< T >* node = m_fake.next; node!= nullptr; node = node->next)
+    {
+      lastNode = node;
+      if (node->next)
+      {
+        prevNode = prevNode->next;
+      }
+    }
+
+    prevNode->next = nullptr;
+    m_tail = prevNode;
+
+    T retval = lastNode->val;
+    delete lastNode;
+
+    return retval;
+  }
+
+  template< class T >
+  T List< T >::popFront() noexcept
+  {
+    Node< T >* toDel = m_fake.next;
+
+    T retval = toDel->val;
+    m_fake.next = toDel->next;
+    delete toDel;
+
+    if (m_fake.next == nullptr)
+    {
+      m_tail = nullptr;
+    }
+
+    return retval;
+  }
+
+  template< class T >
+  bool List< T >::remove (const T& value)
+  {
+    Node< T >* current = m_fake.next;
+    Node< T >* previous = &m_fake;
+    bool deleted = false;
+
+    while (current != nullptr)
+    {
+      if (current->val == value)
+      {
+        previous->next = current->next;
+
+        if (current == m_tail)
+        {
+          m_tail = previous;
+        }
+
+        if (m_tail == &m_fake)
+        {
+          m_tail = nullptr;
+        }
+
+        delete current;
+        deleted = true;
+      }
+
+      previous = current;
+      current = current->next;
+    }
+
+    return deleted;
+  }
+
+  template< class T >
   LIter< T >::LIter(Node< T >* node) noexcept
   {
     m_cur = node;
@@ -186,6 +287,21 @@ namespace bukreev
   T& LIter< T >::operator*() const
   {
     return m_cur->val;
+  }
+
+  template< class T >
+  LIter< T >& LIter< T >::operator++() noexcept
+  {
+    *this = next();
+    return *this;
+  }
+
+  template< class T >
+  LIter< T > LIter< T >::operator++(int) noexcept
+  {
+    LIter< T >& temp = *this;
+    ++*this;
+    return temp;
   }
 
   template< class T >
@@ -216,6 +332,21 @@ namespace bukreev
   T& LCIter< T >::operator*() const
   {
     return m_cur->val;
+  }
+
+  template< class T >
+  LCIter< T >& LCIter< T >::operator++() noexcept
+  {
+    *this = next();
+    return *this;
+  }
+
+  template< class T >
+  LCIter< T > LCIter< T >::operator++(int) noexcept
+  {
+    LCIter< T >& temp = *this;
+    ++*this;
+    return temp;
   }
 
   template< class T >
