@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 #include "list.hpp"
 
 namespace bukreev
@@ -14,7 +15,16 @@ int main()
   bukreev::List< bukreev::Sequence > sequences;
 
   bool overflow = bukreev::input(std::cin, sequences);
-  bukreev::output(std::cout, sequences, overflow);
+
+  try
+  {
+    bukreev::output(std::cout, sequences, overflow);
+  }
+  catch(const std::overflow_error& e)
+  {
+    std::cerr << e.what() << '\n';
+    return 1;
+  }
 
   return overflow ? 1 : 0;
 }
@@ -106,16 +116,20 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs, bool overf
         display = true;
 
         int n = *numIts[i].first;
+        if (n > std::numeric_limits< int >::max() - s)
+        {
+          throw std::overflow_error("Integer overflow");
+        }
         s += n;
 
         if (firstInLine)
         {
-            out << n;
-            firstInLine = false;
+          out << n;
+          firstInLine = false;
         }
         else
         {
-            out << ' ' << n;
+          out << ' ' << n;
         }
 
         numIts[i].first = numIts[i].first.next();
