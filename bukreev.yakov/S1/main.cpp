@@ -105,8 +105,16 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs, bool overf
         display = true;
 
         int n = *numIts[i].first;
-        out << n << ' ';
         s += n;
+
+        if (i == 0)
+        {
+            out << n;
+        }
+        else
+        {
+            out << ' ' << n;
+        }
 
         numIts[i].first = numIts[i].first.next();
       }
