@@ -98,6 +98,7 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs, bool overf
   {
     display = false;
     int s = 0;
+    bool firstInLine = true;
     for (i = 0; i < size; i++)
     {
       if (numIts[i].first != numIts[i].second)
@@ -107,9 +108,10 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs, bool overf
         int n = *numIts[i].first;
         s += n;
 
-        if (i == 0)
+        if (firstInLine)
         {
             out << n;
+            firstInLine = false;
         }
         else
         {
