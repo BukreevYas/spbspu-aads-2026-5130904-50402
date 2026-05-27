@@ -63,9 +63,9 @@ bukreev::Expression bukreev::toPostfix(Expression infix)
   return postfix;
 }
 
-int bukreev::evaluatePostfix(Expression postfix)
+bukreev::num_t bukreev::evaluatePostfix(Expression postfix)
 {
-  Stack< int > tempStack;
+  Stack< num_t > tempStack;
   while (!postfix.empty())
   {
     std::string token = postfix.pop();
@@ -76,25 +76,25 @@ int bukreev::evaluatePostfix(Expression postfix)
         throw std::logic_error("Incorrect expression");
       }
 
-      int b = tempStack.pop();
+      num_t b = tempStack.pop();
       if (tempStack.empty())
       {
         throw std::logic_error("Incorrect expression");
       }
 
-      int a = tempStack.pop();
+      num_t a = tempStack.pop();
       tempStack.push(evaluateOperation(token, a, b));
     }
     else
     {
-      tempStack.push(std::stoi(token));
+      tempStack.push(std::stoll(token));
     }
   }
 
   return tempStack.pop();
 }
 
-int bukreev::evaluateOperation(std::string op, int a, int b)
+bukreev::num_t bukreev::evaluateOperation(std::string op, num_t a, num_t b)
 {
   switch (op[0])
   {

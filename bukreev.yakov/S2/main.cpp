@@ -37,7 +37,7 @@ int main(int argc, char** argv)
   bukreev::Queue< bukreev::Expression > infix;
   bukreev::inputExpressions(*input, infix);
 
-  bukreev::Stack< int > results;
+  bukreev::Stack< bukreev::num_t > results;
   while (!infix.empty())
   {
     bukreev::Expression expr = toPostfix(infix.pop());

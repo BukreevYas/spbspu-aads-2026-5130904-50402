@@ -7,10 +7,11 @@
 namespace bukreev
 {
   using Expression = Queue< std::string >;
+  using num_t = long long;
 
   Expression toPostfix(Expression infix);
-  int evaluatePostfix(Expression postfix);
-  int evaluateOperation(std::string op, int a, int b);
+  num_t evaluatePostfix(Expression postfix);
+  num_t evaluateOperation(std::string op, num_t a, num_t b);
 }
 
 #endif
