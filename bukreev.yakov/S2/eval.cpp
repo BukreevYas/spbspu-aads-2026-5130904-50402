@@ -111,7 +111,7 @@ bukreev::num_t bukreev::evaluateOperation(std::string op, num_t a, num_t b)
     return a / b;
 
   case '%':
-    return a % b;
+    return ((a % b) + b) % b;
 
   default:
     return 0;
