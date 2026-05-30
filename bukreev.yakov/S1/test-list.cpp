@@ -53,8 +53,29 @@ BOOST_AUTO_TEST_CASE(test_push_back)
   LCIter< int > it = list.cbegin();
 
   BOOST_CHECK_EQUAL(*it, 1);
-  it = it.next();
+  it++;
   BOOST_CHECK_EQUAL(*it, 2);
+}
+
+BOOST_AUTO_TEST_CASE(test_count)
+{
+  List< int > list;
+  list.pushBack(1);
+  list.pushBack(2);
+  list.pushBack(1);
+
+  BOOST_CHECK_EQUAL(list.count(1), 2);
+}
+
+BOOST_AUTO_TEST_CASE(test_remove)
+{
+  List< int > list;
+  list.pushBack(1);
+  list.pushBack(9999);
+  list.pushBack(1);
+
+  BOOST_CHECK(list.remove(9999));
+  BOOST_CHECK(!list.remove(9999));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
