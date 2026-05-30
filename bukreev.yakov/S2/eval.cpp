@@ -1,5 +1,6 @@
 #include "eval.hpp"
 #include <stdexcept>
+#include <limits>
 
 bukreev::Expression bukreev::toPostfix(Expression infix)
 {
@@ -99,12 +100,24 @@ bukreev::num_t bukreev::evaluateOperation(std::string op, num_t a, num_t b)
   switch (op[0])
   {
   case '+':
+    if (b > std::numeric_limits< num_t >::max() - a)
+    {
+      throw std::overflow_error("Addition overflow");
+    }
     return a + b;
 
   case '-':
+    if (a < std::numeric_limits< num_t >::min() + b)
+    {
+      throw std::underflow_error("Subtraction underflow");
+    }
     return a - b;
 
   case '*':
+    if (b > std::numeric_limits< num_t >::max() / a)
+    {
+      throw std::overflow_error("Multiplication overflow");
+    }
     return a * b;
 
   case '/':
