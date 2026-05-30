@@ -18,9 +18,11 @@ int main(int argc, char** argv)
   }
 
   std::istream *input;
+  std::ifstream file;
   if (argc == 2)
   {
-    std::ifstream file(argv[1]);
+    file.open(argv[1]);
+
     if (!file.is_open())
     {
       std::cerr << "Failed to open file\n";
