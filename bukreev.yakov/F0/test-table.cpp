@@ -29,4 +29,16 @@ BOOST_AUTO_TEST_CASE(test_put)
   BOOST_CHECK(t.get("abcd") == 4);
 }
 
+BOOST_AUTO_TEST_CASE(test_rehash)
+{
+  HashTable< std::string, int, std::hash< std::string > > t(3);
+
+  t.put("abc", 3);
+  t.put("abcd", 4);
+  t.put("abce", 5);
+  t.put("abcf", 6);
+
+  BOOST_CHECK(t.get("abcf") == 6);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

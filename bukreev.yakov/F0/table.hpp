@@ -12,6 +12,7 @@ namespace bukreev
   {
   public:
     HashTable(size_t capacity = 17);
+    void resize(size_t newCapacity);
     void put(K key, V val);
     V get(K key) const;
     size_t size() const noexcept;
@@ -55,6 +56,48 @@ namespace bukreev
   }
 
   template< class K, class V, class H >
+  void HashTable< K, V, H >::resize(size_t newCapacity)
+  {
+    size_t oldCapacity = mCapacity;
+    Pair* oldPairs = mPairs;
+
+    mCapacity = newCapacity;
+
+    try
+    {
+      mPairs = new Pair[mCapacity];
+    }
+    catch(const std::bad_alloc& e)
+    {
+      delete[] oldPairs;
+      throw;
+    }
+
+    try
+    {
+      mOccupied = new bool[mCapacity];
+    }
+    catch (const std::bad_alloc& e)
+    {
+      delete[] mPairs;
+      delete[] oldPairs;
+      throw;
+    }
+
+    for (size_t i = 0; i < mCapacity; i++)
+    {
+      mOccupied[i] = false;
+    }
+
+    mSize = 0;
+
+    for (size_t i = 0; i < oldCapacity; i++)
+    {
+      put(oldPairs[i].first, oldPairs[i].second);
+    }
+  }
+
+  template< class K, class V, class H >
   void HashTable< K, V, H >::put(K key, V val)
   {
     size_t h1 = hash1(key);
@@ -76,6 +119,8 @@ namespace bukreev
 
     if (i >= mCapacity)
     {
+      resize(mCapacity * 2);
+      put(key, val);
       return;
     }
 
