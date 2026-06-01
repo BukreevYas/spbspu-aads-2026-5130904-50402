@@ -1,56 +1,46 @@
 #include <iostream>
-#include "list.hpp"
+#include <limits>
+#include <list.hpp>
 
 namespace bukreev
 {
-  using Sequence = std::pair< std::string, List< int > >;
+  using Sequence = std::pair< std::string, List< size_t > >;
 
-  bool input(std::istream& in, List< Sequence >& seqs);
-  void output(std::ostream& out, const List< Sequence >& seqs, bool overflow);
+  void input(std::istream& in, List< Sequence >& seqs);
+  void output(std::ostream& out, const List< Sequence >& seqs);
 }
 
 int main()
 {
   bukreev::List< bukreev::Sequence > sequences;
 
-  bool overflow = bukreev::input(std::cin, sequences);
-  bukreev::output(std::cout, sequences, overflow);
-
-  return overflow ? 1 : 0;
+  try
+  {
+    bukreev::input(std::cin, sequences);
+    bukreev::output(std::cout, sequences);
+  }
+  catch(const std::overflow_error& e)
+  {
+    std::cerr << e.what() << '\n';
+    return 1;
+  }
 }
 
-bool bukreev::input(std::istream& in, List< Sequence >& seqs)
+void bukreev::input(std::istream& in, List< Sequence >& seqs)
 {
   std::string name;
-  bool overflow = false;
-  in >> name;
 
-  while (in)
+  while (in >> name)
   {
-    List< int > list;
+    List< size_t > list;
 
-    int num;
-    std::string strnum;
-    while (in >> strnum)
+    size_t num;
+    while (in >> num)
     {
-      try
-      {
-        num = std::stoi(strnum);
-      }
-      catch(const std::invalid_argument& e)
-      {
-        break;
-      }
-      catch(const std::out_of_range& e)
-      {
-        overflow = true;
-      }
-
       list.pushBack(num);
     }
 
     seqs.pushBack({name, list});
-    name = strnum;
 
     if (in.eof())
     {
@@ -59,12 +49,12 @@ bool bukreev::input(std::istream& in, List< Sequence >& seqs)
 
     in.clear();
   }
-
-  return overflow;
 }
 
-void bukreev::output(std::ostream& out, const List< Sequence >& seqs, bool overflow)
+void bukreev::output(std::ostream& out, const List< Sequence >& seqs)
 {
+  bool overflow = false;
+
   LCIter< Sequence > it = seqs.cbegin();
   if (it == seqs.cend())
   {
@@ -80,7 +70,7 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs, bool overf
   }
   out << '\n';
 
-  using ItPair = std::pair< LCIter< int >, LCIter< int > >;
+  using ItPair = std::pair< LCIter< size_t >, LCIter< size_t > >;
 
   size_t size = seqs.size();
   ItPair* numIts = new ItPair[size];
@@ -91,23 +81,40 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs, bool overf
     numIts[i] = {(*it).second.cbegin(), (*it).second.cend()};
   }
 
-  bukreev::List< int > sums;
+  bukreev::List< size_t > sums;
 
   bool display = true;
   while (display)
   {
     display = false;
-    int s = 0;
+    size_t s = 0;
+    bool firstInLine = true;
     for (i = 0; i < size; i++)
     {
       if (numIts[i].first != numIts[i].second)
       {
         display = true;
 
-        int n = *numIts[i].first;
-        out << n << ' ';
+        size_t n = *numIts[i].first;
+        if (n > std::numeric_limits< size_t >::max() - s)
+        {
+          overflow = true;
+        }
         s += n;
 
+<<<<<<< HEAD
+=======
+        if (firstInLine)
+        {
+          out << n;
+          firstInLine = false;
+        }
+        else
+        {
+          out << ' ' << n;
+        }
+
+>>>>>>> bukreev.yakov/S2
         numIts[i].first++;
       }
     }
@@ -121,8 +128,9 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs, bool overf
 
   delete[] numIts;
 
-  if (!overflow)
+  if (overflow)
   {
+<<<<<<< HEAD
     if (sums.size() == 0)
     {
       std::cout <<"0\n";
@@ -141,9 +149,27 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs, bool overf
     }
 
     out << '\n';
+=======
+    throw std::overflow_error("Integer overflow");
+>>>>>>> bukreev.yakov/S2
   }
-  else
+
+  if (sums.size() == 0)
   {
-    std::cerr << "Integer overflow\n";
+    std::cout <<"0\n";
+    return;
   }
+
+  LCIter< size_t > sumit = sums.cbegin();
+  if (sumit != sums.cend())
+  {
+    out << *sumit;
+    sumit++;
+  }
+  for (; sumit != sums.cend(); sumit++)
+  {
+    out << ' ' << *sumit;
+  }
+
+  out << '\n';
 }

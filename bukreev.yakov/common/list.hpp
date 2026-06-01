@@ -268,9 +268,10 @@ namespace bukreev
 
         delete current;
         deleted = true;
+
+        current = previous;
       }
 
-      previous = current;
       current = current->next;
     }
 

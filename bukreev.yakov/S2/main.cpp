@@ -18,9 +18,11 @@ int main(int argc, char** argv)
   }
 
   std::istream *input;
+  std::ifstream file;
   if (argc == 2)
   {
-    std::ifstream file(argv[1]);
+    file.open(argv[1]);
+
     if (!file.is_open())
     {
       std::cerr << "Failed to open file\n";
@@ -37,7 +39,7 @@ int main(int argc, char** argv)
   bukreev::Queue< bukreev::Expression > infix;
   bukreev::inputExpressions(*input, infix);
 
-  bukreev::Stack< int > results;
+  bukreev::Stack< bukreev::num_t > results;
   while (!infix.empty())
   {
     bukreev::Expression expr = toPostfix(infix.pop());
@@ -46,7 +48,7 @@ int main(int argc, char** argv)
     {
       results.push(evaluatePostfix(expr));
     }
-    catch(const std::logic_error& e)
+    catch(const std::exception& e)
     {
       std::cerr << e.what() << '\n';
       return 1;
