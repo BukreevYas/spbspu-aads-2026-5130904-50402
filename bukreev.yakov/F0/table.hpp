@@ -11,6 +11,8 @@ namespace bukreev
   {
   public:
     HashTable(size_t capacity = 17);
+    size_t size();
+    size_t capacity();
 
   private:
     size_t mCapacity;
@@ -28,12 +30,24 @@ namespace bukreev
     mPairs = new Pair[capacity];
     mOccupied = new bool[capacity];
 
-    for (bool& b : mOccupied)
+    for (size_t i = 0; i < capacity; i++)
     {
-      b = false;
+      mOccupied[i] = false;
     }
 
     mSize = 0;
+  }
+
+  template< class K, class V, class H >
+  size_t HashTable< K, V, H >::size()
+  {
+    return mSize;
+  }
+
+  template< class K, class V, class H >
+  size_t HashTable< K, V, H >::capacity()
+  {
+    return mCapacity;
   }
 }
 
