@@ -39,6 +39,7 @@ BOOST_AUTO_TEST_CASE(test_rehash)
   t.put("abcf", 6);
 
   BOOST_CHECK(t.get("abcf") == 6);
+  BOOST_CHECK_EQUAL(t.capacity(), 5);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

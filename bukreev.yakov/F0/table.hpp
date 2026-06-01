@@ -4,9 +4,31 @@
 #include <utility>
 #include <cstdlib>
 #include <stdexcept>
+#include <cmath>
 
 namespace bukreev
 {
+  bool isPrime(size_t n)
+  {
+    for (size_t i = 2; i < sqrt(n) + 1; i++)
+    {
+      if (n % i == 0)
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  size_t nextPrime(size_t n)
+  {
+    do
+    {
+      n++;
+    } while (!isPrime(n));
+    return n;
+  }
+
   template< class K, class V, class H >
   class HashTable
   {
@@ -119,7 +141,7 @@ namespace bukreev
 
     if (i >= mCapacity)
     {
-      resize(mCapacity * 2);
+      resize(nextPrime(mCapacity));
       put(key, val);
       return;
     }
