@@ -8,10 +8,22 @@ BOOST_AUTO_TEST_SUITE(TableTests)
 
 BOOST_AUTO_TEST_CASE(test_constructor)
 {
-  HashTable< std::string, int, std::hash< int > > t(19);
+  HashTable< std::string, int, std::hash< std::string > > t(19);
 
   BOOST_CHECK_EQUAL(t.capacity(), 19);
   BOOST_CHECK_EQUAL(t.size(), 0);
+}
+
+BOOST_AUTO_TEST_CASE(test_put)
+{
+  HashTable< std::string, int, std::hash< std::string > > t(19);
+
+  t.put("abc", 3);
+  BOOST_CHECK_EQUAL(t.size(), 1);
+  t.put("abcd", 4);
+  BOOST_CHECK_EQUAL(t.size(), 2);
+  t.put("abc", 5);
+  BOOST_CHECK_EQUAL(t.size(), 2);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
