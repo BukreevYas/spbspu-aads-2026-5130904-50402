@@ -11,8 +11,8 @@ namespace bukreev
   {
   public:
     HashTable(size_t capacity = 17);
-    size_t size();
-    size_t capacity();
+    size_t size() const noexcept;
+    size_t capacity() const noexcept;
 
   private:
     size_t mCapacity;
@@ -28,7 +28,16 @@ namespace bukreev
   {
     mCapacity = capacity;
     mPairs = new Pair[capacity];
-    mOccupied = new bool[capacity];
+
+    try
+    {
+      mOccupied = new bool[capacity];
+    }
+    catch (const std::bad_alloc& e)
+    {
+      delete[] mPairs;
+      throw;
+    }
 
     for (size_t i = 0; i < capacity; i++)
     {
