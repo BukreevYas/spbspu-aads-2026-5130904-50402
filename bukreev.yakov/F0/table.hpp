@@ -13,6 +13,7 @@ namespace bukreev
   public:
     HashTable(size_t capacity = 17);
     void put(K key, V val);
+    V get(K key) const;
     size_t size() const noexcept;
     size_t capacity() const noexcept;
 
@@ -83,6 +84,28 @@ namespace bukreev
     mOccupied[id] = true;
 
     mSize++;
+  }
+
+  template< class K, class V, class H >
+  V HashTable< K, V, H >::get(K key) const
+  {
+    size_t h1 = hash1(key);
+    size_t h2 = hash2(key);
+
+    size_t i = 0;
+    size_t id = h1;
+    while (mOccupied[id] && i < mCapacity)
+    {
+      if (mPairs[id].first == key)
+      {
+        return mPairs[id].second;
+      }
+
+      i++;
+      id = (h1 + i * h2) % mCapacity;
+    }
+
+    throw std::runtime_error("Bad key");
   }
 
   template< class K, class V, class H >

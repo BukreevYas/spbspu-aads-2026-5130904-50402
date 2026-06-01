@@ -24,6 +24,9 @@ BOOST_AUTO_TEST_CASE(test_put)
   BOOST_CHECK_EQUAL(t.size(), 2);
   t.put("abc", 5);
   BOOST_CHECK_EQUAL(t.size(), 2);
+
+  BOOST_CHECK(t.get("abc") == 5);
+  BOOST_CHECK(t.get("abcd") == 4);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
