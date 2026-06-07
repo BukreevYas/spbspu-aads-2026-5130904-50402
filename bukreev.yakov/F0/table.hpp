@@ -36,7 +36,8 @@ namespace bukreev
     HashTable(size_t capacity = 17);
     void resize(size_t newCapacity);
     void put(K key, V val);
-    V get(K key) const;
+    V& get(K key) const;
+    void remove(K key);
     size_t size() const noexcept;
     size_t capacity() const noexcept;
 
@@ -51,6 +52,7 @@ namespace bukreev
     using Pair = std::pair< K, V >;
     Pair* mPairs;
     bool* mOccupied;
+    bool* mDeleted;
   };
 
   template< class K, class V, class H >
@@ -69,9 +71,21 @@ namespace bukreev
       throw;
     }
 
+    try
+    {
+      mDeleted = new bool[capacity];
+    }
+    catch (const std::bad_alloc& e)
+    {
+      delete[] mPairs;
+      delete[] mOccupied;
+      throw;
+    }
+
     for (size_t i = 0; i < capacity; i++)
     {
       mOccupied[i] = false;
+      mDeleted[i] = false;
     }
 
     mSize = 0;
@@ -106,9 +120,23 @@ namespace bukreev
       throw;
     }
 
+    try
+    {
+      mOccupied = new bool[mCapacity];
+      mDeleted = new bool[mCapacity];
+    }
+    catch (const std::bad_alloc& e)
+    {
+      delete[] mPairs;
+      delete[] oldPairs;
+      delete[] mOccupied;
+      throw;
+    }
+
     for (size_t i = 0; i < mCapacity; i++)
     {
       mOccupied[i] = false;
+      mDeleted[i] = false;
     }
 
     mSize = 0;
@@ -154,7 +182,29 @@ namespace bukreev
   }
 
   template< class K, class V, class H >
-  V HashTable< K, V, H >::get(K key) const
+  V& HashTable< K, V, H >::get(K key) const
+  {
+    size_t h1 = hash1(key);
+    size_t h2 = hash2(key);
+
+    size_t i = 0;
+    size_t id = h1;
+    while ((mOccupied[id] || mDeleted[id]) && i < mCapacity)
+    {
+      if (mPairs[id].first == key && !mDeleted[id])
+      {
+        return mPairs[id].second;
+      }
+
+      i++;
+      id = (h1 + i * h2) % mCapacity;
+    }
+
+    throw std::out_of_range("Bad key");
+  }
+
+  template< class K, class V, class H >
+  void HashTable< K, V, H >::remove(K key)
   {
     size_t h1 = hash1(key);
     size_t h2 = hash2(key);
@@ -165,14 +215,15 @@ namespace bukreev
     {
       if (mPairs[id].first == key)
       {
-        return mPairs[id].second;
+        mOccupied[id] = false;
+        mDeleted[id] = true;
+        mSize--;
+        return;
       }
 
       i++;
       id = (h1 + i * h2) % mCapacity;
     }
-
-    throw std::runtime_error("Bad key");
   }
 
   template< class K, class V, class H >
