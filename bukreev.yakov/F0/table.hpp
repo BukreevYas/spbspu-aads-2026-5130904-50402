@@ -37,7 +37,8 @@ namespace bukreev
     void resize(size_t newCapacity);
     void put(K key, V val);
     V& get(K key) const;
-    void remove(K key);
+    void erase(K key);
+    bool exist(K key);
     size_t size() const noexcept;
     size_t capacity() const noexcept;
 
@@ -191,7 +192,7 @@ namespace bukreev
     size_t id = h1;
     while ((mOccupied[id] || mDeleted[id]) && i < mCapacity)
     {
-      if (mPairs[id].first == key && !mDeleted[id])
+      if (mPairs[id].first == key && mOccupied[id])
       {
         return mPairs[id].second;
       }
@@ -204,16 +205,16 @@ namespace bukreev
   }
 
   template< class K, class V, class H >
-  void HashTable< K, V, H >::remove(K key)
+  void HashTable< K, V, H >::erase(K key)
   {
     size_t h1 = hash1(key);
     size_t h2 = hash2(key);
 
     size_t i = 0;
     size_t id = h1;
-    while (mOccupied[id] && i < mCapacity)
+    while ((mOccupied[id] || mDeleted[id]) && i < mCapacity)
     {
-      if (mPairs[id].first == key)
+      if (mPairs[id].first == key && mOccupied[id])
       {
         mOccupied[id] = false;
         mDeleted[id] = true;
@@ -224,6 +225,28 @@ namespace bukreev
       i++;
       id = (h1 + i * h2) % mCapacity;
     }
+  }
+
+  template< class K, class V, class H >
+  bool HashTable< K, V, H >::exist(K key)
+  {
+    size_t h1 = hash1(key);
+    size_t h2 = hash2(key);
+
+    size_t i = 0;
+    size_t id = h1;
+    while ((mOccupied[id] || mDeleted[id]) && i < mCapacity)
+    {
+      if (mPairs[id].first == key && mOccupied[id])
+      {
+        return true;
+      }
+
+      i++;
+      id = (h1 + i * h2) % mCapacity;
+    }
+
+    return false;
   }
 
   template< class K, class V, class H >
