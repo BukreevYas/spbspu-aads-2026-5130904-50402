@@ -57,24 +57,11 @@ BOOST_AUTO_TEST_CASE(test_push_back)
   BOOST_CHECK_EQUAL(*it, 2);
 }
 
-<<<<<<< HEAD
-BOOST_AUTO_TEST_CASE(test_pop_back)
-=======
 BOOST_AUTO_TEST_CASE(test_count)
->>>>>>> bukreev.yakov/S2
 {
   List< int > list;
   list.pushBack(1);
   list.pushBack(2);
-<<<<<<< HEAD
-  int popped = list.popBack();
-
-  LCIter< int > it = list.cbegin();
-
-  BOOST_CHECK_EQUAL(list.size(), 1);
-  BOOST_CHECK_EQUAL(*it, 1);
-  BOOST_CHECK_EQUAL(popped, 2);
-=======
   list.pushBack(1);
 
   BOOST_CHECK_EQUAL(list.count(1), 2);
@@ -89,7 +76,6 @@ BOOST_AUTO_TEST_CASE(test_remove)
 
   BOOST_CHECK(list.remove(9999));
   BOOST_CHECK(!list.remove(9999));
->>>>>>> bukreev.yakov/S2
 }
 
 BOOST_AUTO_TEST_SUITE_END()

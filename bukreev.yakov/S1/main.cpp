@@ -102,8 +102,6 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs)
         }
         s += n;
 
-<<<<<<< HEAD
-=======
         if (firstInLine)
         {
           out << n;
@@ -114,7 +112,6 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs)
           out << ' ' << n;
         }
 
->>>>>>> bukreev.yakov/S2
         numIts[i].first++;
       }
     }
@@ -130,28 +127,7 @@ void bukreev::output(std::ostream& out, const List< Sequence >& seqs)
 
   if (overflow)
   {
-<<<<<<< HEAD
-    if (sums.size() == 0)
-    {
-      std::cout <<"0\n";
-      return;
-    }
-
-    LCIter< int > sumit = sums.cbegin();
-    if (sumit != sums.cend())
-    {
-      out << *sumit;
-      sumit++;
-    }
-    for (; sumit != sums.cend(); sumit++)
-    {
-      out << ' ' << *sumit;
-    }
-
-    out << '\n';
-=======
     throw std::overflow_error("Integer overflow");
->>>>>>> bukreev.yakov/S2
   }
 
   if (sums.size() == 0)
