@@ -269,10 +269,13 @@ namespace bukreev
         delete current;
         deleted = true;
 
-        current = previous;
+        current = previous->next;
       }
-
-      current = current->next;
+      else
+      {
+        previous = previous->next;
+        current = current->next;
+      }
     }
 
     return deleted;
