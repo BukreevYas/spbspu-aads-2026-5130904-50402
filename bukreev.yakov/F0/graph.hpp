@@ -20,8 +20,6 @@ namespace bukreev
     char symbol;
   };
 
-  using GraphMap = std::unordered_map< std::string, Graph* >;
-
   class Canvas
   {
   public:

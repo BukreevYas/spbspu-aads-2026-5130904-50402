@@ -8,7 +8,7 @@
 
 namespace bukreev
 {
-  bool isPrime(size_t n)
+  static bool isPrime(size_t n)
   {
     for (size_t i = 2; i < sqrt(n) + 1; i++)
     {
@@ -20,7 +20,7 @@ namespace bukreev
     return true;
   }
 
-  size_t nextPrime(size_t n)
+  static size_t nextPrime(size_t n)
   {
     do
     {
@@ -32,6 +32,8 @@ namespace bukreev
   template< class K, class V, class H >
   class HashTable
   {
+    using Pair = std::pair< K, V >;
+
   public:
     HashTable(size_t capacity = 17);
     void resize(size_t newCapacity);
@@ -41,6 +43,8 @@ namespace bukreev
     bool exist(K key);
     size_t size() const noexcept;
     size_t capacity() const noexcept;
+    std::pair< K, V >* getPairs() const noexcept;
+    bool occupied(size_t i) const noexcept;
 
   private:
     size_t hash1(const K& key) const;
@@ -50,7 +54,6 @@ namespace bukreev
     size_t mCapacity;
     size_t mSize;
 
-    using Pair = std::pair< K, V >;
     Pair* mPairs;
     bool* mOccupied;
     bool* mDeleted;
@@ -273,6 +276,18 @@ namespace bukreev
   size_t HashTable< K, V, H >::capacity() const noexcept
   {
     return mCapacity;
+  }
+
+  template< class K, class V, class H >
+  std::pair< K, V >* HashTable< K, V, H >::getPairs() const noexcept
+  {
+    return mPairs;
+  }
+
+  template< class K, class V, class H >
+  bool HashTable< K, V, H >::occupied(size_t i) const noexcept
+  {
+    return mOccupied[i];
   }
 }
 

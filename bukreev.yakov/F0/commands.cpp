@@ -90,14 +90,14 @@ void bukreev::commandLoad(List< std::string > args, GraphMap& map)
 
   graph->symbol = symbol;
 
-  if (map.count(name))
+  if (map.exist(name))
   {
     delete graph;
     std::cout << "<INVALID COMMAND>\n";
     return;
   }
 
-  map[name] = graph;
+  map.put(name, graph);
 
   first = false;
 }
@@ -122,7 +122,7 @@ void bukreev::commandAdd(List< std::string > args, GraphMap& map, List< std::str
     i++;
   }
 
-  if (!map.count(name))
+  if (!map.exist(name))
   {
     std::cout << "<INVALID COMMAND>\n";
     return;
@@ -182,13 +182,13 @@ void bukreev::commandRename(List< std::string > args, GraphMap& map, List< std::
     i++;
   }
 
-  if (!map.count(name1) || map.count(name2))
+  if (!map.exist(name1) || map.exist(name2))
   {
     std::cout << "<INVALID COMMAND>\n";
     return;
   }
 
-  map[name2] = map[name1];
+  map.put(name2, map.get(name1));
   map.erase(name1);
 
   names.remove(name1);
@@ -268,7 +268,7 @@ void bukreev::commandDisplay(
   canvas.clear();
   for (const std::string& name : names)
   {
-    canvas.drawGraph(map[name]);
+    canvas.drawGraph(map.get(name));
   }
 
   canvas.display(out);
@@ -305,8 +305,16 @@ void bukreev::commandSave(
 
 void bukreev::commandList(GraphMap& map, List< std::string >& names)
 {
-  for (const std::pair< std::string, Graph* > p : map)
+  const std::pair< std::string, Graph* >* pairs = map.getPairs();
+  for (size_t i = 0; i < map.capacity(); i++)
   {
+    if (!map.occupied(i))
+    {
+      continue;
+    }
+
+    std::pair< std::string, Graph* > p = pairs[i];
+
     bool added = names.count(p.first) != 0;
 
     Graph* gr = p.second;
@@ -343,7 +351,7 @@ void bukreev::commandApproximate(List< std::string > args, GraphMap& map, List< 
     i++;
   }
 
-  Graph* gr = map[name];
+  Graph* gr = map.get(name);
   size_t deviations[6] = {};
   for (const point_t pt : gr->points)
   {
@@ -416,7 +424,7 @@ void bukreev::commandApproximate(List< std::string > args, GraphMap& map, List< 
 
   graph->symbol = symbol;
 
-  map[name + "_approximated"] = graph;
+  map.put(name + "_approximated", graph);
 
   if (names.count(name))
   {

@@ -4,9 +4,12 @@
 #include <string>
 #include <list.hpp>
 #include "graph.hpp"
+#include "table.hpp"
 
 namespace bukreev
 {
+  using GraphMap = HashTable< std::string, Graph*, std::hash< std::string > >;
+
   void commandLoad(List< std::string > args, GraphMap& map);
   void commandWidth(List< std::string > args, Canvas& canvas);
   void commandHeight(List< std::string > args, Canvas& canvas);
