@@ -77,23 +77,22 @@ namespace bukreev
     bool remove (const T& value);
 
   private:
-    Node< T > m_fake;
+    Node< T >* m_head;
     Node< T >* m_tail;
   };
 
   template< class T >
-  List< T >::List() noexcept
+  List< T >::List() noexcept:
+    m_head(nullptr),
+    m_tail(nullptr)
   {
-    m_fake.next = nullptr;
-    m_tail = nullptr;
   }
 
   template< class T >
-  List< T >::List(const List< T >& other)
+  List< T >::List(const List< T >& other):
+    m_head(nullptr),
+    m_tail(nullptr)
   {
-    m_fake.next = nullptr;
-    m_tail = nullptr;
-
     for (LIter< T > it = other.begin(); it != other.end(); it++)
     {
       pushBack(*it);
@@ -122,7 +121,7 @@ namespace bukreev
   template< class T >
   void List< T >::clear() noexcept
   {
-    Node< T >* cur = m_fake.next;
+    Node< T >* cur = m_head;
     while (cur)
     {
       Node< T >* n = cur->next;
@@ -130,7 +129,7 @@ namespace bukreev
       cur = n;
     }
 
-    m_fake.next = nullptr;
+    m_head = nullptr;
     m_tail = nullptr;
   }
 
@@ -164,7 +163,7 @@ namespace bukreev
   template< class T >
   LIter< T > List< T >::begin() const noexcept
   {
-    return LIter< T >(m_fake.next);
+    return LIter< T >(m_head);
   }
 
   template< class T >
@@ -176,7 +175,7 @@ namespace bukreev
   template< class T >
   LCIter< T > List< T >::cbegin() const noexcept
   {
-    return LCIter< T >(m_fake.next);
+    return LCIter< T >(m_head);
   }
 
   template< class T >
@@ -198,7 +197,7 @@ namespace bukreev
     }
     else
     {
-      m_fake.next = node;
+      m_head = node;
     }
     m_tail = node;
   }
@@ -206,22 +205,26 @@ namespace bukreev
   template< class T >
   T List< T >::popBack() noexcept
   {
-    Node< T >* lastNode;
-    Node< T >* prevNode = &m_fake;
-    for (Node< T >* node = m_fake.next; node!= nullptr; node = node->next)
+    Node< T >* penult = m_head;
+    Node< T >* last = m_head;
+    while (last->next)
     {
-      lastNode = node;
-      if (node->next)
-      {
-        prevNode = prevNode->next;
-      }
+      penult = last;
+      last = last->next;
     }
 
-    prevNode->next = nullptr;
-    m_tail = prevNode;
+    T retval = last->val;
+    delete last;
 
-    T retval = lastNode->val;
-    delete lastNode;
+    if (m_head == m_tail)
+    {
+      m_head = m_tail = nullptr;
+    }
+    else
+    {
+      penult->next = nullptr;
+      m_tail = penult;
+    }
 
     return retval;
   }
@@ -229,13 +232,13 @@ namespace bukreev
   template< class T >
   T List< T >::popFront() noexcept
   {
-    Node< T >* toDel = m_fake.next;
+    T retval = m_head->val;
 
-    T retval = toDel->val;
-    m_fake.next = toDel->next;
-    delete toDel;
+    Node< T >* next = m_head->next;
+    delete m_head;
+    m_head = next;
 
-    if (m_fake.next == nullptr)
+    if (m_head == nullptr)
     {
       m_tail = nullptr;
     }
@@ -246,35 +249,34 @@ namespace bukreev
   template< class T >
   bool List< T >::remove (const T& value)
   {
-    Node< T >* current = m_fake.next;
-    Node< T >* previous = &m_fake;
+    Node< T >* cur = m_head;
+    Node< T >* prev = m_head;
     bool deleted = false;
 
-    while (current != nullptr)
+    while (cur)
     {
-      if (current->val == value)
+      if (cur->val == value)
       {
-        previous->next = current->next;
-
-        if (current == m_tail)
-        {
-          m_tail = previous;
-        }
-
-        if (m_tail == &m_fake)
-        {
-          m_tail = nullptr;
-        }
-
-        delete current;
+        prev->next = cur->next;
+        delete cur;
         deleted = true;
 
-        current = previous->next;
+        if (cur == m_tail)
+        {
+          m_tail = prev;
+        }
+
+        if (m_tail == m_head)
+        {
+          m_head = m_tail = nullptr;
+        }
+
+        cur = prev->next;
       }
       else
       {
-        previous = previous->next;
-        current = current->next;
+        prev = cur;
+        cur = cur->next;
       }
     }
 
